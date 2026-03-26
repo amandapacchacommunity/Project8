@@ -1,753 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Amanda | Higher Ed Compliance Operations Demo</title>
-  <style>
-    :root {
-      --bg: #f6f8fb;
-      --panel: #ffffff;
-      --text: #1f2937;
-      --muted: #6b7280;
-      --border: #e5e7eb;
-      --accent: #1d4ed8;
-      --accent-soft: #dbeafe;
-      --warn: #b45309;
-      --danger: #b91c1c;
-      --good: #047857;
-      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-      --radius: 18px;
-      --radius-lg: 28px;
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
-      color: var(--text);
-    }
-    a { color: var(--accent); text-decoration: none; }
-    .container { max-width: 1260px; margin: 0 auto; padding: 24px; }
-    .grid { display: grid; gap: 18px; }
-    .stats { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 24px; }
-    .two-col { grid-template-columns: 1.2fr .8fr; margin-bottom: 24px; }
-    .three-col { grid-template-columns: 1fr 1fr 1fr; margin-bottom: 24px; }
-    .four-col { grid-template-columns: repeat(4, 1fr); margin-bottom: 24px; }
-    .hero {
-      background: rgba(255,255,255,0.85);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(229,231,235,0.9);
-      box-shadow: var(--shadow);
-      border-radius: var(--radius-lg);
-      padding: 28px;
-      margin-bottom: 24px;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: auto -80px -80px auto;
-      width: 240px;
-      height: 240px;
-      background: radial-gradient(circle at center, rgba(29,78,216,.15), rgba(29,78,216,0));
-      border-radius: 50%;
-      pointer-events: none;
-    }
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--accent-soft);
-      color: var(--accent);
-      border-radius: 999px;
-      padding: 8px 12px;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .02em;
-      text-transform: uppercase;
-    }
-    .hero-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      align-items: start;
-      flex-wrap: wrap;
-    }
-    h1 {
-      margin: 16px 0 10px;
-      font-size: clamp(2rem, 4vw, 3.1rem);
-      line-height: 1.05;
-    }
-    h2, h3 { margin-top: 0; }
-    .subtitle {
-      color: var(--muted);
-      line-height: 1.65;
-      max-width: 920px;
-      margin: 0;
-      font-size: 1rem;
-    }
-    .hero-meta { display: grid; gap: 10px; min-width: 260px; }
-    .meta-card {
-      background: linear-gradient(180deg, #fff 0%, #fafcff 100%);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 14px 16px;
-    }
-    .meta-label {
-      font-size: 11px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      font-weight: 700;
-      margin-bottom: 5px;
-    }
-    .meta-value { font-size: 15px; font-weight: 700; }
-    .nav-pills { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: #fff;
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 10px 14px;
-      font-size: 14px;
-      font-weight: 600;
-    }
-    .panel, .stat-card, .step-card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-    .panel { padding: 20px; }
-    .panel-subtitle {
-      margin: 0 0 18px;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
-    }
-    .stat-card {
-      padding: 20px;
-      background: linear-gradient(180deg, #fff 0%, #fafcff 100%);
-    }
-    .stat-label {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-      font-weight: 700;
-    }
-    .stat-value { font-size: 2rem; font-weight: 800; margin-bottom: 6px; }
-    .stat-note, .small { color: var(--muted); font-size: 13px; line-height: 1.6; }
-    .step-card { padding: 20px; display: grid; gap: 8px; }
-    .step-number {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      display: inline-grid;
-      place-items: center;
-      background: var(--accent-soft);
-      color: var(--accent);
-      font-weight: 800;
-    }
-    .step-title { font-weight: 800; font-size: 1.05rem; }
-    .callout {
-      border-left: 4px solid var(--accent);
-      background: #f8fbff;
-      padding: 14px 16px;
-      border-radius: 12px;
-      color: var(--text);
-      line-height: 1.65;
-      font-size: 14px;
-    }
-    .controls {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-    .control label {
-      display: block;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--muted);
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-    }
-    select, button, input[type="range"] {
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 10px 12px;
-      font: inherit;
-      background: #fff;
-      color: var(--text);
-    }
-    button {
-      background: var(--accent);
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-weight: 700;
-    }
-    button.secondary {
-      background: #eef2ff;
-      color: var(--accent);
-      border: 1px solid #c7d2fe;
-    }
-    .button-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
-    .bar-list { display: grid; gap: 14px; }
-    .bar-row { display: grid; gap: 8px; }
-    .bar-header {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      font-size: 14px;
-    }
-    .bar-track {
-      height: 12px;
-      background: #eef2f7;
-      border-radius: 999px;
-      overflow: hidden;
-    }
-    .bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #60a5fa 0%, #1d4ed8 100%);
-      border-radius: 999px;
-    }
-    table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    th, td {
-      padding: 12px 10px;
-      border-bottom: 1px solid var(--border);
-      text-align: left;
-      vertical-align: top;
-    }
-    th {
-      color: var(--muted);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-    }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-    .risk-high { background: #fee2e2; color: var(--danger); }
-    .risk-medium { background: #fef3c7; color: var(--warn); }
-    .risk-low { background: #dcfce7; color: var(--good); }
-    .status-open { background: #dbeafe; color: #1d4ed8; }
-    .status-closed { background: #dcfce7; color: var(--good); }
-    .status-review { background: #fef3c7; color: var(--warn); }
-    .legend { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
-    .legend span {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-    .framework-list, .insight-list { margin: 0; padding-left: 18px; line-height: 1.9; }
-    .footer-note {
-      margin-top: 24px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.7;
-    }
-    @media (max-width: 980px) {
-      .two-col, .three-col, .four-col { grid-template-columns: 1fr; }
-      .hero-top { flex-direction: column; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compliance Operations Demo</title>
+<style>
+body {font-family: system-ui, sans-serif; margin:0; background:#f5f7fb; color:#1f2937;}
+.container {max-width:1100px; margin:auto; padding:24px;}
+.hero, .section {background:white; padding:24px; border-radius:16px; margin-bottom:20px;}
+h1 {margin:0 0 10px;}
+.small {color:#6b7280; font-size:14px;}
+.info {
+  display:inline-block;
+  margin-left:6px;
+  background:#1d4ed8;
+  color:white;
+  width:16px;
+  height:16px;
+  border-radius:50%;
+  text-align:center;
+  font-size:11px;
+  line-height:16px;
+  cursor:pointer;
+  position:relative;
+}
+.tooltip {
+  visibility:hidden;
+  width:220px;
+  background:#111827;
+  color:#fff;
+  text-align:left;
+  padding:8px;
+  border-radius:6px;
+  position:absolute;
+  z-index:1;
+  bottom:125%;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:12px;
+}
+.info:hover .tooltip {
+  visibility:visible;
+}
+</style>
 </head>
 <body>
-  <div class="container">
-    <section class="hero" id="top">
-      <div class="eyebrow">Interview-ready • GitHub Pages • Synthetic higher ed compliance demo</div>
-      <div class="hero-top">
-        <div>
-          <h1>Amanda | Associate Director of Compliance Portfolio Demo</h1>
-          <p class="subtitle">
-            This interactive site demonstrates how I would structure compliance operations for a mid-sized private New York university:
-            prompt and equitable investigations, training coverage, documentation readiness, campus partner coordination, and operational controls
-            aligned to federal and New York State requirements.
-          </p>
-          <div class="nav-pills">
-            <a class="pill" href="#presentation">Presentation mode</a>
-            <a class="pill" href="#dashboard">Dashboard</a>
-            <a class="pill" href="#framework">Investigation framework</a>
-            <a class="pill" href="#matrix">Compliance matrix</a>
-          </div>
-        </div>
-        <div class="hero-meta">
-          <div class="meta-card">
-            <div class="meta-label">Role target</div>
-            <div class="meta-value">Associate Director of Compliance</div>
-          </div>
-          <div class="meta-card">
-            <div class="meta-label">Institution model</div>
-            <div class="meta-value">Fictional NY private university, Hofstra-scale synthetic data</div>
-          </div>
-          <div class="meta-card">
-            <div class="meta-label">Use case</div>
-            <div class="meta-value">Hiring committee portfolio artifact</div>
-          </div>
-        </div>
-      </div>
-    </section>
+<div class="container">
 
-    <section class="panel" id="presentation">
-      <h2>Presentation Mode</h2>
-      <p class="panel-subtitle">
-        Use this section to guide a hiring committee through the site in under three minutes.
-      </p>
-      <div class="grid four-col">
-        <div class="step-card">
-          <div class="step-number">1</div>
-          <div class="step-title">Start with risk and timeliness</div>
-          <div class="small">Use the dashboard filters to isolate high-risk Title IX and related matters, then discuss prompt outreach and time to resolution.</div>
-        </div>
-        <div class="step-card">
-          <div class="step-number">2</div>
-          <div class="step-title">Show operational oversight</div>
-          <div class="small">Highlight training completion, case mix, and cross-functional flags to show how investigations connect to prevention and campus coordination.</div>
-        </div>
-        <div class="step-card">
-          <div class="step-number">3</div>
-          <div class="step-title">Explain your framework</div>
-          <div class="small">Walk through intake, evidence gathering, trauma-informed interviewing, analysis, and hearing support as a consistent process.</div>
-        </div>
-        <div class="step-card">
-          <div class="step-number">4</div>
-          <div class="step-title">Connect to compliance controls</div>
-          <div class="small">Use the matrix to show how legal and policy requirements become documented actions, owners, and evidence.</div>
-        </div>
-      </div>
-      <div class="callout" style="margin-top:16px;">
-        Suggested line: <strong>“I built this prototype to show how I think operationally about compliance—linking prompt investigations, training, documentation, and campus partnerships into a system that is fair, trackable, and audit-ready.”</strong>
-      </div>
-    </section>
+<div class="hero">
+<h1>Compliance Operations Demo</h1>
+<p class="small">
+This interactive model demonstrates how compliance operations can be structured using synthetic data,
+including investigations, training, and regulatory alignment.
+</p>
+</div>
 
-    <section class="grid stats" id="stats"></section>
+<div class="section">
+<h2>How to Use This Dashboard
+<span class="info">i
+  <span class="tooltip">Guidance for exploring how compliance workflows and metrics connect to operational decision-making.</span>
+</span>
+</h2>
+<ul class="small">
+<li>Explore case filtering to understand investigation workflow and timeliness</li>
+<li>Review training completion to assess compliance coverage</li>
+<li>Analyze risk and case distribution</li>
+<li>Connect outputs to compliance controls and documentation</li>
+</ul>
+</div>
 
-    <section class="grid two-col" id="dashboard">
-      <div class="panel">
-        <h2>Investigation Explorer</h2>
-        <p class="panel-subtitle">Filter synthetic cases to demonstrate timeliness, risk triage, and hearing readiness.</p>
-        <div class="controls">
-          <div class="control">
-            <label for="typeFilter">Allegation type</label>
-            <select id="typeFilter"></select>
-          </div>
-          <div class="control">
-            <label for="statusFilter">Case status</label>
-            <select id="statusFilter"></select>
-          </div>
-          <div class="control">
-            <label for="riskFilter">Risk level</label>
-            <select id="riskFilter"></select>
-          </div>
-          <div class="control">
-            <label for="maxDays">Max days to resolution: <span id="daysValue">120</span></label>
-            <input id="maxDays" type="range" min="15" max="180" value="120" />
-          </div>
-        </div>
-        <div class="small" id="caseSummary"></div>
-        <div style="overflow:auto; margin-top: 14px;">
-          <table>
-            <thead>
-              <tr>
-                <th>Case</th>
-                <th>Type</th>
-                <th>Status</th>
-                <th>Risk</th>
-                <th>Days to Outreach</th>
-                <th>Days to Resolution</th>
-                <th>Hearing</th>
-              </tr>
-            </thead>
-            <tbody id="caseTable"></tbody>
-          </table>
-        </div>
-      </div>
+<div class="section">
+<h2>Key Concepts Modeled
+<span class="info">i
+  <span class="tooltip">Core compliance components typically required for institutional accountability and regulatory alignment.</span>
+</span>
+</h2>
+<ul class="small">
+<li>Prompt, equitable investigations</li>
+<li>Training and reporting obligations</li>
+<li>Cross-functional coordination</li>
+<li>Compliance documentation and audit readiness</li>
+</ul>
+</div>
 
-      <div class="panel">
-        <h2>Institution Profile</h2>
-        <p class="panel-subtitle">Fictional university assumptions used to generate realistic synthetic compliance data.</p>
-        <div class="bar-list" id="profileBars"></div>
-        <div class="legend">
-          <span><i class="dot" style="background:#1d4ed8"></i>Students</span>
-          <span><i class="dot" style="background:#2563eb"></i>Employees</span>
-          <span><i class="dot" style="background:#60a5fa"></i>Operational units</span>
-        </div>
-        <p class="footer-note">
-          This model assumes a residential and commuter student population, student employee training obligations, Public Safety coordination,
-          and student conduct / Title IX response functions typical of a mid-sized New York private university.
-        </p>
-      </div>
-    </section>
+<div class="section">
+<h2>Compliance Matrix (Example)
+<span class="info">i
+  <span class="tooltip">Illustrates how requirements translate into operational controls and documentation practices.</span>
+</span>
+</h2>
+<table border="1" cellpadding="8" cellspacing="0">
+<tr><th>Requirement</th><th>Source</th><th>Control</th></tr>
+<tr><td>Investigations</td><td>Regulatory framework</td><td>Structured case process</td></tr>
+<tr><td>Training</td><td>Institutional policy</td><td>Annual programs</td></tr>
+<tr><td>Reporting</td><td>Safety and reporting standards</td><td>Incident tracking</td></tr>
+</table>
+</div>
 
-    <section class="grid three-col">
-      <div class="panel">
-        <h3>Training Coverage</h3>
-        <p class="panel-subtitle">Synthetic completion rates by audience and topic.</p>
-        <div class="bar-list" id="trainingBars"></div>
-      </div>
-      <div class="panel">
-        <h3>Case Mix</h3>
-        <p class="panel-subtitle">Filtered allegation distribution.</p>
-        <div class="bar-list" id="mixBars"></div>
-      </div>
-      <div class="panel">
-        <h3>Operational Flags</h3>
-        <p class="panel-subtitle">Committee-ready talking points generated from the current view.</p>
-        <div id="flags"></div>
-      </div>
-    </section>
+<p class="small">
+This project uses synthetic data and is intended for demonstration purposes only.
+</p>
 
-    <section class="grid two-col" id="framework">
-      <div class="panel">
-        <h2>My Investigation Framework</h2>
-        <p class="panel-subtitle">A concise structure for fair, prompt, and impartial investigations.</p>
-        <ol class="framework-list">
-          <li><strong>Intake and initial assessment:</strong> clarify allegation type, jurisdiction, immediate safety concerns, and reporting obligations.</li>
-          <li><strong>Investigation planning:</strong> identify parties, witnesses, evidence sources, and documentation needs.</li>
-          <li><strong>Neutral fact gathering:</strong> conduct thorough interviews and collect records, digital evidence, and relevant contextual information.</li>
-          <li><strong>Trauma-informed process management:</strong> maintain fairness while using communication practices that reduce unnecessary harm.</li>
-          <li><strong>Analysis and findings:</strong> evaluate credibility, consistency, corroboration, and policy application.</li>
-          <li><strong>Report and hearing support:</strong> present findings clearly, maintain complete records, and support institutional decision-making.</li>
-        </ol>
-      </div>
-      <div class="panel">
-        <h2>Interpretive Insights</h2>
-        <p class="panel-subtitle">Examples of the kinds of observations I would surface for leadership.</p>
-        <ul class="insight-list" id="insights"></ul>
-        <div class="callout" style="margin-top:16px;">
-          Suggested line: <strong>“My goal is not only to complete investigations, but to create a process that is consistent, explainable, and operationally useful to the institution.”</strong>
-        </div>
-      </div>
-    </section>
-
-    <section class="panel" id="matrix">
-      <h2>Compliance Matrix</h2>
-      <p class="panel-subtitle">Operational control map connecting regulatory expectations to actions, owners, and evidence.</p>
-      <div class="button-row">
-        <button id="showAllBtn">Show all controls</button>
-        <button class="secondary" id="showHighRiskBtn">Show high-risk controls only</button>
-      </div>
-      <div style="overflow:auto;">
-        <table>
-          <thead>
-            <tr>
-              <th>Requirement</th>
-              <th>Source</th>
-              <th>Operational Control</th>
-              <th>Owner</th>
-              <th>Evidence</th>
-              <th>Risk</th>
-            </tr>
-          </thead>
-          <tbody id="matrixTable"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <p class="footer-note">
-      This site uses synthetic data only. It is intended for portfolio and interview demonstration purposes and does not provide legal advice,
-      case outcomes, or real institutional reporting. Replace “Amanda” with your preferred professional name format before publishing if needed.
-    </p>
-  </div>
-
-  <script>
-    const institution = {
-      totalStudents: 10520,
-      undergraduate: 6480,
-      graduate: 4040,
-      employees: 2150,
-      residenceLifeStudents: 3600,
-      commuterStudents: 6920,
-      annualRevenueM: 702,
-      divisions: 11
-    };
-
-    const cases = [
-      { id: 'C-1001', type: 'Title IX', status: 'Open', risk: 'High', outreach: 1, resolution: 42, hearing: 'Pending' },
-      { id: 'C-1002', type: 'Discrimination', status: 'Closed', risk: 'Medium', outreach: 2, resolution: 27, hearing: 'No' },
-      { id: 'C-1003', type: 'Harassment', status: 'Review', risk: 'Medium', outreach: 1, resolution: 36, hearing: 'No' },
-      { id: 'C-1004', type: 'Title IX', status: 'Closed', risk: 'High', outreach: 1, resolution: 51, hearing: 'Yes' },
-      { id: 'C-1005', type: 'Retaliation', status: 'Open', risk: 'High', outreach: 3, resolution: 63, hearing: 'Pending' },
-      { id: 'C-1006', type: 'Policy Violation', status: 'Closed', risk: 'Low', outreach: 2, resolution: 18, hearing: 'No' },
-      { id: 'C-1007', type: 'Discrimination', status: 'Open', risk: 'Medium', outreach: 2, resolution: 48, hearing: 'No' },
-      { id: 'C-1008', type: 'Title IX', status: 'Review', risk: 'High', outreach: 1, resolution: 71, hearing: 'Yes' },
-      { id: 'C-1009', type: 'Harassment', status: 'Closed', risk: 'Medium', outreach: 2, resolution: 31, hearing: 'No' },
-      { id: 'C-1010', type: 'Policy Violation', status: 'Closed', risk: 'Low', outreach: 1, resolution: 15, hearing: 'No' },
-      { id: 'C-1011', type: 'Title IX', status: 'Open', risk: 'High', outreach: 1, resolution: 84, hearing: 'Pending' },
-      { id: 'C-1012', type: 'Discrimination', status: 'Review', risk: 'Medium', outreach: 4, resolution: 52, hearing: 'No' }
-    ];
-
-    const training = [
-      { label: 'Student Employees', completion: 94, topic: 'Reporting and referral obligations' },
-      { label: 'Resident Assistants', completion: 97, topic: 'Title IX and emergency escalation' },
-      { label: 'Public Safety', completion: 91, topic: 'Trauma-informed response' },
-      { label: 'Faculty and Staff', completion: 88, topic: 'Mandatory reporting awareness' },
-      { label: 'Orientation Leaders', completion: 99, topic: 'Resource referral' }
-    ];
-
-    const controls = [
-      {
-        requirement: 'Prompt, equitable, impartial investigation of sex-based complaints',
-        source: 'Title IX',
-        control: 'Document intake, assign investigator, conduct interviews, gather evidence, issue report',
-        owner: 'Associate Director / Title IX',
-        evidence: 'Case file, interview notes, report timeline',
-        risk: 'High'
-      },
-      {
-        requirement: 'Affirmative consent, students’ bill of rights, amnesty expectations',
-        source: 'NYS Enough Is Enough',
-        control: 'Embed rights notice in intake packet, orientation, and conduct materials',
-        owner: 'Compliance + Student Affairs',
-        evidence: 'Rights notice, orientation materials, acknowledgments',
-        risk: 'High'
-      },
-      {
-        requirement: 'Training for campus partners and student-facing personnel',
-        source: 'Institutional policy / federal guidance',
-        control: 'Annual training calendar for Public Safety, student employees, faculty, and staff',
-        owner: 'Associate Director',
-        evidence: 'Attendance logs, decks, completion reports',
-        risk: 'Medium'
-      },
-      {
-        requirement: 'Accurate recordkeeping and hearing support',
-        source: 'Institutional policy',
-        control: 'Secure file storage, documented findings, disciplinary hearing preparation',
-        owner: 'Compliance Office',
-        evidence: 'Case records, hearing exhibits, final letters',
-        risk: 'High'
-      },
-      {
-        requirement: 'Coordination on campus safety and related reporting',
-        source: 'VAWA / Clery-related operations',
-        control: 'Coordinate with Public Safety for incident review, card access, and timely warning decisions',
-        owner: 'Compliance + Public Safety',
-        evidence: 'Incident logs, referral notes, review checklist',
-        risk: 'High'
-      },
-      {
-        requirement: 'Non-discrimination complaint response',
-        source: 'NYS Human Rights Law / campus policy',
-        control: 'Standardized investigation protocol for harassment and discrimination matters',
-        owner: 'Associate Director',
-        evidence: 'Complaint forms, interview plans, outcomes',
-        risk: 'Medium'
-      }
-    ];
-
-    const $ = (id) => document.getElementById(id);
-
-    function uniqueValues(items, key) {
-      return ['All', ...new Set(items.map(item => item[key]))];
-    }
-
-    function renderSelect(id, values) {
-      $(id).innerHTML = values.map(v => `<option value="${v}">${v}</option>`).join('');
-    }
-
-    function badgeClass(type, value) {
-      const v = value.toLowerCase();
-      if (type === 'risk') return `badge risk-${v}`;
-      if (type === 'status') {
-        if (v === 'open') return 'badge status-open';
-        if (v === 'closed') return 'badge status-closed';
-        return 'badge status-review';
-      }
-      return 'badge';
-    }
-
-    function pct(value, total) {
-      return Math.round((value / total) * 100);
-    }
-
-    function filterCases() {
-      const type = $('typeFilter').value;
-      const status = $('statusFilter').value;
-      const risk = $('riskFilter').value;
-      const maxDays = Number($('maxDays').value);
-
-      return cases.filter(c =>
-        (type === 'All' || c.type === type) &&
-        (status === 'All' || c.status === status) &&
-        (risk === 'All' || c.risk === risk) &&
-        c.resolution <= maxDays
-      );
-    }
-
-    function renderStats(filteredCases) {
-      const openCases = filteredCases.filter(c => c.status === 'Open').length;
-      const avgResolution = filteredCases.length ? Math.round(filteredCases.reduce((a, c) => a + c.resolution, 0) / filteredCases.length) : 0;
-      const hearings = filteredCases.filter(c => c.hearing === 'Yes' || c.hearing === 'Pending').length;
-      const avgTraining = Math.round(training.reduce((a, t) => a + t.completion, 0) / training.length);
-
-      const cards = [
-        { label: 'Synthetic student population', value: institution.totalStudents.toLocaleString(), note: `${institution.undergraduate.toLocaleString()} undergraduate • ${institution.graduate.toLocaleString()} graduate` },
-        { label: 'Open filtered cases', value: openCases, note: `${filteredCases.length} total cases in current view` },
-        { label: 'Avg days to resolution', value: avgResolution, note: 'Committee talking point for promptness and case management' },
-        { label: 'Hearings supported', value: hearings, note: 'Pending and completed hearing tracks in current filter' },
-        { label: 'Training completion', value: `${avgTraining}%`, note: 'Synthetic campuswide benchmark across key audiences' }
-      ];
-
-      $('stats').innerHTML = cards.map(card => `
-        <div class="stat-card">
-          <div class="stat-label">${card.label}</div>
-          <div class="stat-value">${card.value}</div>
-          <div class="stat-note">${card.note}</div>
-        </div>
-      `).join('');
-    }
-
-    function renderProfile() {
-      const profile = [
-        { label: 'Students', value: institution.totalStudents, max: 12000 },
-        { label: 'Employees', value: institution.employees, max: 3000 },
-        { label: 'Residential population', value: institution.residenceLifeStudents, max: 5000 },
-        { label: 'Commuter population', value: institution.commuterStudents, max: 8000 },
-        { label: 'Annual revenue ($M)', value: institution.annualRevenueM, max: 800 },
-        { label: 'Operational partner units', value: institution.divisions, max: 15 }
-      ];
-      $('profileBars').innerHTML = profile.map(item => `
-        <div class="bar-row">
-          <div class="bar-header"><strong>${item.label}</strong><span>${item.value.toLocaleString()}</span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:${pct(item.value, item.max)}%"></div></div>
-        </div>
-      `).join('');
-    }
-
-    function renderCases() {
-      const filtered = filterCases();
-      $('caseSummary').textContent = `${filtered.length} of ${cases.length} synthetic cases match the current filters.`;
-      $('caseTable').innerHTML = filtered.map(c => `
-        <tr>
-          <td><strong>${c.id}</strong></td>
-          <td>${c.type}</td>
-          <td><span class="${badgeClass('status', c.status)}">${c.status}</span></td>
-          <td><span class="${badgeClass('risk', c.risk)}">${c.risk}</span></td>
-          <td>${c.outreach} day${c.outreach === 1 ? '' : 's'}</td>
-          <td>${c.resolution} days</td>
-          <td>${c.hearing}</td>
-        </tr>
-      `).join('') || `<tr><td colspan="7" class="small">No cases match the selected filters.</td></tr>`;
-
-      renderStats(filtered);
-      renderMix(filtered);
-      renderFlags(filtered);
-      renderInsights(filtered);
-    }
-
-    function renderTraining() {
-      $('trainingBars').innerHTML = training.map(t => `
-        <div class="bar-row">
-          <div class="bar-header"><strong>${t.label}</strong><span>${t.completion}%</span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:${t.completion}%"></div></div>
-          <div class="small">${t.topic}</div>
-        </div>
-      `).join('');
-    }
-
-    function renderMix(filtered) {
-      const counts = {};
-      filtered.forEach(c => counts[c.type] = (counts[c.type] || 0) + 1);
-      const max = Math.max(...Object.values(counts), 1);
-      $('mixBars').innerHTML = Object.entries(counts).map(([label, value]) => `
-        <div class="bar-row">
-          <div class="bar-header"><strong>${label}</strong><span>${value}</span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:${pct(value, max)}%"></div></div>
-        </div>
-      `).join('') || `<div class="small">No allegation types to display for current filters.</div>`;
-    }
-
-    function renderFlags(filtered) {
-      const overdue = filtered.filter(c => c.resolution > 60).length;
-      const highRisk = filtered.filter(c => c.risk === 'High').length;
-      const hearingTrack = filtered.filter(c => c.hearing === 'Yes' || c.hearing === 'Pending').length;
-      const items = [
-        `High-risk matters in current view: <strong>${highRisk}</strong>`,
-        `Cases over 60 days to resolution: <strong>${overdue}</strong>`,
-        `Cases requiring hearing readiness: <strong>${hearingTrack}</strong>`,
-        `Strong presentation angle: connect prompt outreach, documentation quality, and cross-functional coordination.`
-      ];
-      $('flags').innerHTML = `<ul class="small" style="padding-left:18px; margin:0; line-height:1.9;">${items.map(i => `<li>${i}</li>`).join('')}</ul>`;
-    }
-
-    function renderInsights(filtered) {
-      const open = filtered.filter(c => c.status === 'Open').length;
-      const high = filtered.filter(c => c.risk === 'High').length;
-      const avgOutreach = filtered.length ? (filtered.reduce((a, c) => a + c.outreach, 0) / filtered.length).toFixed(1) : '0.0';
-      const over60 = filtered.filter(c => c.resolution > 60).length;
-
-      const insights = [
-        `Current filtered view includes <strong>${high}</strong> high-risk matters, which is a useful way to discuss triage, communication planning, and escalation protocols.`,
-        `Average outreach timing in the current view is <strong>${avgOutreach} days</strong>, supporting a conversation about prompt response and procedural consistency.`,
-        `${over60 ? `There are <strong>${over60}</strong> matters over 60 days to resolution, which can be framed as a resource allocation and workflow management issue.` : `No matters exceed 60 days in the current view, which supports a discussion of efficient case progression and monitoring.`}`,
-        `There are <strong>${open}</strong> open cases in the current filter, which helps illustrate active workload management and documentation discipline.`
-      ];
-
-      $('insights').innerHTML = insights.map(i => `<li>${i}</li>`).join('');
-    }
-
-    function renderMatrix(highOnly = false) {
-      const rows = highOnly ? controls.filter(c => c.risk === 'High') : controls;
-      $('matrixTable').innerHTML = rows.map(row => `
-        <tr>
-          <td>${row.requirement}</td>
-          <td>${row.source}</td>
-          <td>${row.control}</td>
-          <td>${row.owner}</td>
-          <td>${row.evidence}</td>
-          <td><span class="${badgeClass('risk', row.risk)}">${row.risk}</span></td>
-        </tr>
-      `).join('');
-    }
-
-    function init() {
-      renderSelect('typeFilter', uniqueValues(cases, 'type'));
-      renderSelect('statusFilter', uniqueValues(cases, 'status'));
-      renderSelect('riskFilter', uniqueValues(cases, 'risk'));
-      renderProfile();
-      renderTraining();
-      renderMatrix();
-      renderCases();
-
-      ['typeFilter', 'statusFilter', 'riskFilter'].forEach(id => {
-        $(id).addEventListener('change', renderCases);
-      });
-
-      $('maxDays').addEventListener('input', (e) => {
-        $('daysValue').textContent = e.target.value;
-        renderCases();
-      });
-
-      $('showAllBtn').addEventListener('click', () => renderMatrix(false));
-      $('showHighRiskBtn').addEventListener('click', () => renderMatrix(true));
-    }
-
-    init();
-  </script>
+</div>
 </body>
 </html>
