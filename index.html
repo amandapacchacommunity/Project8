@@ -5,102 +5,176 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Compliance Operations Demo</title>
 <style>
-body {font-family: system-ui, sans-serif; margin:0; background:#f5f7fb; color:#1f2937;}
-.container {max-width:1100px; margin:auto; padding:24px;}
-.hero, .section {background:white; padding:24px; border-radius:16px; margin-bottom:20px;}
-h1 {margin:0 0 10px;}
-.small {color:#6b7280; font-size:14px;}
-.info {
-  display:inline-block;
-  margin-left:6px;
-  background:#1d4ed8;
-  color:white;
-  width:16px;
-  height:16px;
-  border-radius:50%;
-  text-align:center;
-  font-size:11px;
-  line-height:16px;
-  cursor:pointer;
-  position:relative;
-}
-.tooltip {
-  visibility:hidden;
-  width:220px;
-  background:#111827;
-  color:#fff;
-  text-align:left;
-  padding:8px;
-  border-radius:6px;
-  position:absolute;
-  z-index:1;
-  bottom:125%;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:12px;
-}
-.info:hover .tooltip {
-  visibility:visible;
-}
+  :root{
+    --bg:#f5f7fb; --panel:#ffffff; --text:#1f2937; --muted:#6b7280; --border:#e5e7eb;
+    --accent:#1d4ed8; --soft:#eef2ff; --good:#047857; --warn:#b45309; --danger:#b91c1c;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text)}
+  .container{max-width:1100px;margin:auto;padding:24px}
+  .hero,.section{background:var(--panel);border:1px solid var(--border);padding:20px;border-radius:16px;margin-bottom:18px}
+  h1{margin:0 0 8px}
+  h2{margin:0 0 10px}
+  .small{color:var(--muted);font-size:14px;line-height:1.6}
+
+  .grid{display:grid;gap:14px}
+  .stats{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+  .card{border:1px solid var(--border);border-radius:14px;padding:14px;background:#fff}
+  .label{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700}
+  .value{font-size:22px;font-weight:800;margin:4px 0}
+
+  .controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+  button{border:1px solid var(--border);border-radius:999px;padding:8px 12px;background:#fff;cursor:pointer;font-weight:600}
+  button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{padding:10px;border-bottom:1px solid var(--border);text-align:left}
+  th{font-size:12px;color:var(--muted);text-transform:uppercase}
+
+  .badge{padding:3px 8px;border-radius:999px;font-size:12px;font-weight:700}
+  .high{background:#fee2e2;color:var(--danger)}
+  .medium{background:#fef3c7;color:var(--warn)}
+  .low{background:#dcfce7;color:var(--good)}
+
+  .info{display:inline-block;margin-left:6px;background:var(--accent);color:#fff;width:16px;height:16px;border-radius:50%;text-align:center;font-size:11px;line-height:16px;position:relative;cursor:pointer}
+  .tooltip{visibility:hidden;opacity:0;transition:.15s;position:absolute;bottom:130%;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:8px;border-radius:6px;width:220px;font-size:12px}
+  .info:hover .tooltip{visibility:visible;opacity:1}
+
+  .bars{display:grid;gap:10px}
+  .bar{height:10px;background:#eef2f7;border-radius:999px;overflow:hidden}
+  .fill{height:100%;background:linear-gradient(90deg,#60a5fa,#1d4ed8)}
 </style>
 </head>
 <body>
 <div class="container">
 
 <div class="hero">
-<h1>Compliance Operations Demo</h1>
-<p class="small">
-This interactive model demonstrates how compliance operations can be structured using synthetic data,
-including investigations, training, and regulatory alignment.
-</p>
+  <h1>Compliance Operations Demo</h1>
+  <p class="small">
+    This model demonstrates how compliance activities can be translated into structured workflows, metrics, and controls using synthetic data.
+  </p>
 </div>
 
 <div class="section">
-<h2>How to Use This Dashboard
-<span class="info">i
-  <span class="tooltip">Guidance for exploring how compliance workflows and metrics connect to operational decision-making.</span>
-</span>
-</h2>
-<ul class="small">
-<li>Explore case filtering to understand investigation workflow and timeliness</li>
-<li>Review training completion to assess compliance coverage</li>
-<li>Analyze risk and case distribution</li>
-<li>Connect outputs to compliance controls and documentation</li>
-</ul>
+  <h2>Metrics Snapshot
+    <span class="info">i<span class="tooltip">Illustrative metrics showing how compliance operations can be monitored.</span></span>
+  </h2>
+  <div class="grid stats" id="stats"></div>
 </div>
 
 <div class="section">
-<h2>Key Concepts Modeled
-<span class="info">i
-  <span class="tooltip">Core compliance components typically required for institutional accountability and regulatory alignment.</span>
-</span>
-</h2>
-<ul class="small">
-<li>Prompt, equitable investigations</li>
-<li>Training and reporting obligations</li>
-<li>Cross-functional coordination</li>
-<li>Compliance documentation and audit readiness</li>
-</ul>
+  <h2>Case Controls
+    <span class="info">i<span class="tooltip">Toggle to explore how different risk levels affect operational focus.</span></span>
+  </h2>
+  <div class="controls">
+    <button id="allBtn" class="active">All</button>
+    <button id="highBtn">High Risk Only</button>
+  </div>
+  <table>
+    <thead>
+      <tr><th>Case</th><th>Type</th><th>Risk</th><th>Days</th></tr>
+    </thead>
+    <tbody id="table"></tbody>
+  </table>
+  <p class="small">Why this matters: Helps prioritize resources and ensure timely response to higher-risk matters.</p>
 </div>
 
 <div class="section">
-<h2>Compliance Matrix (Example)
-<span class="info">i
-  <span class="tooltip">Illustrates how requirements translate into operational controls and documentation practices.</span>
-</span>
-</h2>
-<table border="1" cellpadding="8" cellspacing="0">
-<tr><th>Requirement</th><th>Source</th><th>Control</th></tr>
-<tr><td>Investigations</td><td>Regulatory framework</td><td>Structured case process</td></tr>
-<tr><td>Training</td><td>Institutional policy</td><td>Annual programs</td></tr>
-<tr><td>Reporting</td><td>Safety and reporting standards</td><td>Incident tracking</td></tr>
-</table>
+  <h2>Training Coverage
+    <span class="info">i<span class="tooltip">Training supports prevention and awareness across stakeholder groups.</span></span>
+  </h2>
+  <div class="bars" id="training"></div>
+  <p class="small">Why this matters: Strong training coverage reduces risk and improves reporting consistency.</p>
 </div>
 
-<p class="small">
-This project uses synthetic data and is intended for demonstration purposes only.
-</p>
+<div class="section">
+  <h2>Compliance Matrix
+    <span class="info">i<span class="tooltip">Maps requirements to operational controls and documentation.</span></span>
+  </h2>
+  <table>
+    <thead>
+      <tr><th>Requirement</th><th>Control</th><th>Risk</th></tr>
+    </thead>
+    <tbody id="matrix"></tbody>
+  </table>
+  <p class="small">Why this matters: Ensures consistency, accountability, and audit readiness.</p>
+</div>
+
+<p class="small">Synthetic data. Demonstration purposes only.</p>
 
 </div>
+
+<script>
+const cases=[
+{id:'C1',type:'Investigation',risk:'High',days:42},
+{id:'C2',type:'Complaint',risk:'Medium',days:30},
+{id:'C3',type:'Investigation',risk:'High',days:65},
+{id:'C4',type:'Policy',risk:'Low',days:15}
+];
+
+const training=[
+{label:'Staff',val:88},
+{label:'Students',val:92},
+{label:'Safety',val:95}
+];
+
+const matrix=[
+{req:'Investigations',ctrl:'Structured workflow',risk:'High'},
+{req:'Training',ctrl:'Annual delivery',risk:'Medium'},
+{req:'Reporting',ctrl:'Tracking logs',risk:'High'}
+];
+
+const $=id=>document.getElementById(id);
+
+function renderStats(){
+  const avg=Math.round(cases.reduce((a,c)=>a+c.days,0)/cases.length);
+  const high=cases.filter(c=>c.risk==='High').length;
+  const cards=[
+    {l:'Avg Days',v:avg},
+    {l:'High Risk Cases',v:high},
+    {l:'Total Cases',v:cases.length},
+    {l:'Training Avg',v:Math.round(training.reduce((a,t)=>a+t.val,0)/training.length)+'%'}
+  ];
+  $('stats').innerHTML=cards.map(c=>`<div class="card"><div class="label">${c.l}</div><div class="value">${c.v}</div></div>`).join('');
+}
+
+function renderTable(highOnly=false){
+  const data=highOnly?cases.filter(c=>c.risk==='High'):cases;
+  $('table').innerHTML=data.map(c=>`
+    <tr>
+      <td>${c.id}</td>
+      <td>${c.type}</td>
+      <td><span class="badge ${c.risk.toLowerCase()}">${c.risk}</span></td>
+      <td>${c.days}</td>
+    </tr>`).join('');
+}
+
+function renderTraining(){
+  $('training').innerHTML=training.map(t=>`
+    <div>
+      <div class="small">${t.label} (${t.val}%)</div>
+      <div class="bar"><div class="fill" style="width:${t.val}%"></div></div>
+    </div>`).join('');
+}
+
+function renderMatrix(){
+  $('matrix').innerHTML=matrix.map(m=>`
+    <tr>
+      <td>${m.req}</td>
+      <td>${m.ctrl}</td>
+      <td><span class="badge ${m.risk.toLowerCase()}">${m.risk}</span></td>
+    </tr>`).join('');
+}
+
+$('allBtn').onclick=()=>{renderTable(false);toggle('allBtn')};
+$('highBtn').onclick=()=>{renderTable(true);toggle('highBtn')};
+
+function toggle(id){
+  document.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+  $(id).classList.add('active');
+}
+
+renderStats();renderTable();renderTraining();renderMatrix();
+</script>
 </body>
 </html>
