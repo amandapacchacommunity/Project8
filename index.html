@@ -1,180 +1,755 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Compliance Operations Demo</title>
-<style>
-  :root{
-    --bg:#f5f7fb; --panel:#ffffff; --text:#1f2937; --muted:#6b7280; --border:#e5e7eb;
-    --accent:#1d4ed8; --soft:#eef2ff; --good:#047857; --warn:#b45309; --danger:#b91c1c;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text)}
-  .container{max-width:1100px;margin:auto;padding:24px}
-  .hero,.section{background:var(--panel);border:1px solid var(--border);padding:20px;border-radius:16px;margin-bottom:18px}
-  h1{margin:0 0 8px}
-  h2{margin:0 0 10px}
-  .small{color:var(--muted);font-size:14px;line-height:1.6}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compliance Operations Demo</title>
+  <style>
+    :root{
+      --bg:#f5f7fb;
+      --panel:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --border:#e5e7eb;
+      --accent:#1d4ed8;
+      --soft:#eef2ff;
+      --good:#047857;
+      --warn:#b45309;
+      --danger:#b91c1c;
+      --shadow:0 8px 24px rgba(15,23,42,.06);
+    }
 
-  .grid{display:grid;gap:14px}
-  .stats{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
-  .card{border:1px solid var(--border);border-radius:14px;padding:14px;background:#fff}
-  .label{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700}
-  .value{font-size:22px;font-weight:800;margin:4px 0}
+    * { box-sizing:border-box; }
 
-  .controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
-  button{border:1px solid var(--border);border-radius:999px;padding:8px 12px;background:#fff;cursor:pointer;font-weight:600}
-  button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
 
-  table{width:100%;border-collapse:collapse;font-size:14px}
-  th,td{padding:10px;border-bottom:1px solid var(--border);text-align:left}
-  th{font-size:12px;color:var(--muted);text-transform:uppercase}
+    .container{
+      max-width:1200px;
+      margin:auto;
+      padding:24px;
+    }
 
-  .badge{padding:3px 8px;border-radius:999px;font-size:12px;font-weight:700}
-  .high{background:#fee2e2;color:var(--danger)}
-  .medium{background:#fef3c7;color:var(--warn)}
-  .low{background:#dcfce7;color:var(--good)}
+    .hero,
+    .section{
+      background:var(--panel);
+      border:1px solid var(--border);
+      padding:20px;
+      border-radius:18px;
+      margin-bottom:18px;
+      box-shadow:var(--shadow);
+    }
 
-  .info{display:inline-block;margin-left:6px;background:var(--accent);color:#fff;width:16px;height:16px;border-radius:50%;text-align:center;font-size:11px;line-height:16px;position:relative;cursor:pointer}
-  .tooltip{visibility:hidden;opacity:0;transition:.15s;position:absolute;bottom:130%;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:8px;border-radius:6px;width:220px;font-size:12px}
-  .info:hover .tooltip{visibility:visible;opacity:1}
+    h1{ margin:0 0 8px; }
+    h2{ margin:0 0 10px; }
+    h3{ margin:0 0 8px; }
 
-  .bars{display:grid;gap:10px}
-  .bar{height:10px;background:#eef2f7;border-radius:999px;overflow:hidden}
-  .fill{height:100%;background:linear-gradient(90deg,#60a5fa,#1d4ed8)}
-</style>
+    .small{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.65;
+    }
+
+    .grid{
+      display:grid;
+      gap:14px;
+    }
+
+    .stats{
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    }
+
+    .two-col{
+      grid-template-columns:1.15fr .85fr;
+    }
+
+    .card{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:14px;
+      background:#fff;
+    }
+
+    .label{
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .value{
+      font-size:22px;
+      font-weight:800;
+      margin:4px 0;
+    }
+
+    .controls{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+
+    button{
+      border:1px solid var(--border);
+      border-radius:999px;
+      padding:9px 13px;
+      background:#fff;
+      cursor:pointer;
+      font-weight:600;
+      color:var(--text);
+    }
+
+    button:hover{
+      border-color:#cbd5e1;
+      background:#fafcff;
+    }
+
+    button.active{
+      background:var(--accent);
+      color:#fff;
+      border-color:var(--accent);
+    }
+
+    .secondary-btn{
+      border-radius:10px;
+      padding:7px 10px;
+      font-size:13px;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:14px;
+    }
+
+    th, td{
+      padding:12px 10px;
+      border-bottom:1px solid var(--border);
+      text-align:left;
+      vertical-align:top;
+    }
+
+    th{
+      font-size:12px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+
+    .badge{
+      display:inline-block;
+      padding:3px 8px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    .high{ background:#fee2e2; color:var(--danger); }
+    .medium{ background:#fef3c7; color:var(--warn); }
+    .low{ background:#dcfce7; color:var(--good); }
+
+    .status-open{ background:#dbeafe; color:#1d4ed8; }
+    .status-review{ background:#ede9fe; color:#6d28d9; }
+    .status-closed{ background:#dcfce7; color:var(--good); }
+
+    .info{
+      display:inline-block;
+      margin-left:6px;
+      background:var(--accent);
+      color:#fff;
+      width:16px;
+      height:16px;
+      border-radius:50%;
+      text-align:center;
+      font-size:11px;
+      line-height:16px;
+      position:relative;
+      cursor:pointer;
+      vertical-align:middle;
+    }
+
+    .tooltip{
+      visibility:hidden;
+      opacity:0;
+      transition:.15s;
+      position:absolute;
+      bottom:130%;
+      left:50%;
+      transform:translateX(-50%);
+      background:#111827;
+      color:#fff;
+      padding:8px 10px;
+      border-radius:8px;
+      width:250px;
+      font-size:12px;
+      line-height:1.45;
+      text-align:left;
+      z-index:30;
+      box-shadow:var(--shadow);
+    }
+
+    .info:hover .tooltip{
+      visibility:visible;
+      opacity:1;
+    }
+
+    .bars{
+      display:grid;
+      gap:12px;
+    }
+
+    .bar{
+      height:10px;
+      background:#eef2f7;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .fill{
+      height:100%;
+      background:linear-gradient(90deg,#60a5fa,#1d4ed8);
+    }
+
+    .logic{
+      border:1px dashed var(--border);
+      border-radius:12px;
+      padding:12px;
+      background:#fafcff;
+      font-size:14px;
+      color:var(--text);
+      margin-top:10px;
+    }
+
+    .analysis-panel{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:16px;
+      background:#fbfdff;
+      min-height:420px;
+    }
+
+    .analysis-id{
+      font-size:12px;
+      font-weight:700;
+      color:var(--accent);
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      margin-bottom:6px;
+    }
+
+    .analysis-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+      margin:14px 0;
+    }
+
+    .mini-card{
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:12px;
+      padding:12px;
+    }
+
+    .mini-title{
+      font-size:12px;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:700;
+      margin-bottom:6px;
+      letter-spacing:.04em;
+    }
+
+    .factor-list,
+    .steps-list{
+      margin:8px 0 0;
+      padding-left:18px;
+    }
+
+    .factor-list li,
+    .steps-list li{
+      margin-bottom:7px;
+      line-height:1.55;
+      color:var(--text);
+    }
+
+    .recommendation-box{
+      border-left:4px solid var(--accent);
+      background:#f8fbff;
+      border-radius:12px;
+      padding:12px 14px;
+      margin-top:14px;
+    }
+
+    .muted-divider{
+      height:1px;
+      background:var(--border);
+      margin:14px 0;
+    }
+
+    .table-wrap{
+      overflow:auto;
+    }
+
+    .footer-note{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.6;
+      margin-top:4px;
+    }
+
+    @media (max-width: 900px){
+      .two-col,
+      .analysis-grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="container">
+  <div class="container">
 
-<div class="hero">
-  <h1>Compliance Operations Demo</h1>
-  <p class="small">
-    This model demonstrates how compliance activities can be translated into structured workflows, metrics, and controls using synthetic data.
-  </p>
-</div>
+    <div class="hero">
+      <h1>Compliance Operations Demo</h1>
+      <p class="small">
+        This model demonstrates how compliance activities can be translated into structured workflows,
+        metrics, controls, and recommendation logic using synthetic data.
+      </p>
+    </div>
 
-<div class="section">
-  <h2>Metrics Snapshot
-    <span class="info">i<span class="tooltip">Illustrative metrics showing how compliance operations can be monitored.</span></span>
-  </h2>
-  <div class="grid stats" id="stats"></div>
-</div>
+    <div class="section">
+      <h2>
+        Metrics Snapshot
+        <span class="info">i
+          <span class="tooltip">Illustrative metrics showing how compliance operations can be monitored over time.</span>
+        </span>
+      </h2>
+      <div class="grid stats" id="stats"></div>
+    </div>
 
-<div class="section">
-  <h2>Case Controls
-    <span class="info">i<span class="tooltip">Toggle to explore how different risk levels affect operational focus.</span></span>
-  </h2>
-  <div class="controls">
-    <button id="allBtn" class="active">All</button>
-    <button id="highBtn">High Risk Only</button>
+    <div class="grid two-col">
+      <div class="section">
+        <h2>
+          Case Review Table
+          <span class="info">i
+            <span class="tooltip">Each row includes a modeled case study and structured recommendation analysis.</span>
+          </span>
+        </h2>
+
+        <div class="controls">
+          <button id="allBtn" class="active">All Cases</button>
+          <button id="highBtn">High Risk Only</button>
+          <button id="openBtn">Open / Review</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Case</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Risk</th>
+                <th>Days</th>
+                <th>Recommendation</th>
+                <th>Analysis</th>
+              </tr>
+            </thead>
+            <tbody id="caseTable"></tbody>
+          </table>
+        </div>
+
+        <p class="small">
+          Why this matters: Helps prioritize resources, support consistent review, and connect recommendations to documented reasoning.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2>
+          Case Study Analysis
+          <span class="info">i
+            <span class="tooltip">Select any case to view the modeled reasoning behind the determination and recommendation.</span>
+          </span>
+        </h2>
+
+        <div class="analysis-panel" id="analysisPanel">
+          <div class="small">Select a case to view the full analysis.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>
+        Training Coverage
+        <span class="info">i
+          <span class="tooltip">Training supports prevention, awareness, and reporting consistency across stakeholder groups.</span>
+        </span>
+      </h2>
+
+      <div class="bars" id="training"></div>
+
+      <p class="small">
+        Why this matters: Strong training coverage reduces risk and improves awareness of institutional responsibilities.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>
+        How Recommendations Are Determined
+        <span class="info">i
+          <span class="tooltip">Recommendations are modeled from multiple review factors rather than a single trigger.</span>
+        </span>
+      </h2>
+
+      <p class="small">
+        Recommendations in this model are based on a structured review of available information. No single factor determines the result.
+      </p>
+
+      <ul class="small">
+        <li><strong>Severity of conduct:</strong> nature and impact of the behavior</li>
+        <li><strong>Pattern or repetition:</strong> prior related incidents or continued conduct</li>
+        <li><strong>Evidence strength:</strong> consistency, corroboration, and reliability of information</li>
+        <li><strong>Policy alignment:</strong> how conduct maps to defined standards or expectations</li>
+        <li><strong>Risk to community:</strong> potential for continued harm or disruption</li>
+        <li><strong>Operational response need:</strong> whether training, monitoring, support measures, or formal escalation are warranted</li>
+      </ul>
+
+      <div class="logic">
+        Intake → Evidence Review → Evaluation Factors → Findings → Recommendation → Follow-Up Actions
+      </div>
+
+      <p class="small">
+        Why this matters: Structured decision-making improves consistency, transparency, and accountability.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>
+        Compliance Matrix
+        <span class="info">i
+          <span class="tooltip">Maps requirements to operational controls and documentation practices.</span>
+        </span>
+      </h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Requirement</th>
+            <th>Control</th>
+            <th>Risk</th>
+          </tr>
+        </thead>
+        <tbody id="matrix"></tbody>
+      </table>
+
+      <p class="small">
+        Why this matters: Supports consistency, accountability, and audit readiness.
+      </p>
+    </div>
+
+    <p class="footer-note">Synthetic data. Demonstration purposes only.</p>
   </div>
-  <table>
-    <thead>
-      <tr><th>Case</th><th>Type</th><th>Risk</th><th>Days</th></tr>
-    </thead>
-    <tbody id="table"></tbody>
-  </table>
-  <p class="small">Why this matters: Helps prioritize resources and ensure timely response to higher-risk matters.</p>
-</div>
 
-<div class="section">
-  <h2>Training Coverage
-    <span class="info">i<span class="tooltip">Training supports prevention and awareness across stakeholder groups.</span></span>
-  </h2>
-  <div class="bars" id="training"></div>
-  <p class="small">Why this matters: Strong training coverage reduces risk and improves reporting consistency.</p>
-</div>
+  <script>
+    const cases = [
+      {
+        id:'C1',
+        type:'Investigation',
+        status:'Open',
+        risk:'High',
+        days:42,
+        recommendation:'Formal review + interim measures',
+        summary:'Modeled report involving repeated conduct, corroborating messages, and an identified need for immediate response.',
+        facts:[
+          'Reporting party described repeated unwanted contact over a two-week period.',
+          'Two witness statements partially corroborated timeline and setting.',
+          'Digital messages supported pattern and contact frequency.',
+          'Initial safety concern warranted temporary supportive measures.'
+        ],
+        factors:{
+          severity:'High: conduct affected access and created ongoing disruption concerns.',
+          pattern:'Present: multiple related interactions were reported.',
+          evidence:'Moderate to strong: witness detail and digital records aligned on key points.',
+          policy:'Directly implicates conduct and reporting standards in the model.',
+          communityRisk:'Elevated: continued contact risk remained active at intake.'
+        },
+        analysis:[
+          'The recommendation is not based on allegation type alone.',
+          'Pattern and corroboration increased confidence in escalation beyond informal response.',
+          'Supportive measures were modeled because the reported conduct appeared ongoing at the time of review.'
+        ],
+        determination:'Escalate to formal review, maintain interim support measures, and document ongoing monitoring.'
+      },
+      {
+        id:'C2',
+        type:'Complaint',
+        status:'Closed',
+        risk:'Medium',
+        days:30,
+        recommendation:'Targeted training + documented resolution',
+        summary:'Modeled complaint involving a single incident with limited harm, no repeat pattern, and partial corroboration.',
+        facts:[
+          'Complaint described inappropriate but isolated conduct in a group setting.',
+          'Witnesses confirmed part of the interaction but differed on tone and intent.',
+          'No prior related incidents were identified in the synthetic history.',
+          'No continuing safety concern was modeled after intake.'
+        ],
+        factors:{
+          severity:'Medium: conduct was inappropriate but limited in duration and scope.',
+          pattern:'Not established: no repeat conduct identified.',
+          evidence:'Moderate: some corroboration, but not all details were consistent.',
+          policy:'Conduct aligned with expectations requiring corrective response.',
+          communityRisk:'Low to moderate: little indication of ongoing harm.'
+        },
+        analysis:[
+          'Because the conduct appeared isolated, the model prioritizes corrective intervention over formal escalation.',
+          'The recommendation balances accountability with the lower operational need for restrictive measures.',
+          'Documented closure remains important because isolated events may become pattern indicators later.'
+        ],
+        determination:'Use targeted training, written documentation, and follow-up rather than formal escalation.'
+      },
+      {
+        id:'C3',
+        type:'Investigation',
+        status:'Review',
+        risk:'High',
+        days:65,
+        recommendation:'Formal review + enhanced monitoring',
+        summary:'Modeled case with delayed resolution due to conflicting interviews, but high concern remained because of repeated reports and community impact.',
+        facts:[
+          'Case involved multiple interviews with inconsistencies in peripheral details.',
+          'Two separate reports raised related concerns within the same review window.',
+          'Evidence did not fully resolve every fact question, but key behavioral concerns remained consistent.',
+          'Operational delay resulted from additional review steps and follow-up interviews.'
+        ],
+        factors:{
+          severity:'High: impact on participation and environment was significant.',
+          pattern:'Present: separate reports suggested a repeat concern.',
+          evidence:'Moderate: not complete on every issue, but consistent on core themes.',
+          policy:'Aligned with standards requiring thorough review and response.',
+          communityRisk:'High: unresolved repeat concerns justified continued oversight.'
+        },
+        analysis:[
+          'The model distinguishes between incomplete certainty on every fact and sufficient basis for elevated response.',
+          'Repeated concerns can justify monitoring and formal review even where some details remain disputed.',
+          'Longer case duration here is treated as an operational flag, not a reason to reduce response.'
+        ],
+        determination:'Maintain formal review, document reason for delay, and apply enhanced monitoring based on repeat-concern indicators.'
+      },
+      {
+        id:'C4',
+        type:'Policy',
+        status:'Closed',
+        risk:'Low',
+        days:15,
+        recommendation:'Coaching + notation',
+        summary:'Modeled low-risk policy matter with clear facts, limited impact, and no indication of repeated behavior.',
+        facts:[
+          'Incident involved a straightforward policy deviation with immediate acknowledgment.',
+          'Documentation was complete at intake and did not require extended investigation.',
+          'No affected party requested additional measures in the model.',
+          'Resolution occurred quickly due to clear fact pattern.'
+        ],
+        factors:{
+          severity:'Low: limited institutional impact and no ongoing disruption.',
+          pattern:'Not present: no related history identified.',
+          evidence:'Strong: facts were clear and uncontested.',
+          policy:'Minor but documentable policy issue.',
+          communityRisk:'Low: no continuing risk indicators.'
+        },
+        analysis:[
+          'The model avoids over-escalating low-risk matters where coaching and documentation are sufficient.',
+          'Fast resolution is appropriate here because the fact pattern was clear and limited.',
+          'A notation remains useful to support consistency if future related conduct appears.'
+        ],
+        determination:'Resolve with coaching, notation, and closure rather than formal process escalation.'
+      }
+    ];
 
-<div class="section">
-  <h2>Compliance Matrix
-    <span class="info">i<span class="tooltip">Maps requirements to operational controls and documentation.</span></span>
-  </h2>
-  <table>
-    <thead>
-      <tr><th>Requirement</th><th>Control</th><th>Risk</th></tr>
-    </thead>
-    <tbody id="matrix"></tbody>
-  </table>
-  <p class="small">Why this matters: Ensures consistency, accountability, and audit readiness.</p>
-</div>
+    const training = [
+      { label:'Staff', val:88 },
+      { label:'Students', val:92 },
+      { label:'Safety', val:95 },
+      { label:'Supervisors', val:90 }
+    ];
 
-<p class="small">Synthetic data. Demonstration purposes only.</p>
+    const matrix = [
+      { req:'Investigations', ctrl:'Structured workflow and documentation trail', risk:'High' },
+      { req:'Training', ctrl:'Annual delivery and completion tracking', risk:'Medium' },
+      { req:'Reporting', ctrl:'Tracking logs and review checkpoints', risk:'High' },
+      { req:'Follow-up', ctrl:'Supportive measures and monitoring notes', risk:'Medium' }
+    ];
 
-</div>
+    const $ = id => document.getElementById(id);
+    let currentFilter = 'all';
+    let selectedCaseId = cases[0].id;
 
-<script>
-const cases=[
-{id:'C1',type:'Investigation',risk:'High',days:42},
-{id:'C2',type:'Complaint',risk:'Medium',days:30},
-{id:'C3',type:'Investigation',risk:'High',days:65},
-{id:'C4',type:'Policy',risk:'Low',days:15}
-];
+    function riskBadgeClass(risk){
+      return risk.toLowerCase();
+    }
 
-const training=[
-{label:'Staff',val:88},
-{label:'Students',val:92},
-{label:'Safety',val:95}
-];
+    function statusBadgeClass(status){
+      const normalized = status.toLowerCase();
+      if(normalized === 'open') return 'status-open';
+      if(normalized === 'review') return 'status-review';
+      return 'status-closed';
+    }
 
-const matrix=[
-{req:'Investigations',ctrl:'Structured workflow',risk:'High'},
-{req:'Training',ctrl:'Annual delivery',risk:'Medium'},
-{req:'Reporting',ctrl:'Tracking logs',risk:'High'}
-];
+    function getFilteredCases(){
+      if(currentFilter === 'high') return cases.filter(c => c.risk === 'High');
+      if(currentFilter === 'open') return cases.filter(c => c.status === 'Open' || c.status === 'Review');
+      return cases;
+    }
 
-const $=id=>document.getElementById(id);
+    function renderStats() {
+      const avgDays = Math.round(cases.reduce((a, c) => a + c.days, 0) / cases.length);
+      const highRisk = cases.filter(c => c.risk === 'High').length;
+      const openCases = cases.filter(c => c.status === 'Open' || c.status === 'Review').length;
+      const trainingAvg = Math.round(training.reduce((a, t) => a + t.val, 0) / training.length) + '%';
 
-function renderStats(){
-  const avg=Math.round(cases.reduce((a,c)=>a+c.days,0)/cases.length);
-  const high=cases.filter(c=>c.risk==='High').length;
-  const cards=[
-    {l:'Avg Days',v:avg},
-    {l:'High Risk Cases',v:high},
-    {l:'Total Cases',v:cases.length},
-    {l:'Training Avg',v:Math.round(training.reduce((a,t)=>a+t.val,0)/training.length)+'%'}
-  ];
-  $('stats').innerHTML=cards.map(c=>`<div class="card"><div class="label">${c.l}</div><div class="value">${c.v}</div></div>`).join('');
-}
+      const cards = [
+        { l:'Avg Days', v:avgDays, n:'Average review duration across modeled cases' },
+        { l:'High Risk Cases', v:highRisk, n:'Cases requiring elevated response or monitoring' },
+        { l:'Open / Review', v:openCases, n:'Cases still requiring active attention' },
+        { l:'Training Avg', v:trainingAvg, n:'Average synthetic completion across groups' }
+      ];
 
-function renderTable(highOnly=false){
-  const data=highOnly?cases.filter(c=>c.risk==='High'):cases;
-  $('table').innerHTML=data.map(c=>`
-    <tr>
-      <td>${c.id}</td>
-      <td>${c.type}</td>
-      <td><span class="badge ${c.risk.toLowerCase()}">${c.risk}</span></td>
-      <td>${c.days}</td>
-    </tr>`).join('');
-}
+      $('stats').innerHTML = cards.map(c => `
+        <div class="card">
+          <div class="label">${c.l}</div>
+          <div class="value">${c.v}</div>
+          <div class="small">${c.n}</div>
+        </div>
+      `).join('');
+    }
 
-function renderTraining(){
-  $('training').innerHTML=training.map(t=>`
-    <div>
-      <div class="small">${t.label} (${t.val}%)</div>
-      <div class="bar"><div class="fill" style="width:${t.val}%"></div></div>
-    </div>`).join('');
-}
+    function renderCaseTable() {
+      const data = getFilteredCases();
 
-function renderMatrix(){
-  $('matrix').innerHTML=matrix.map(m=>`
-    <tr>
-      <td>${m.req}</td>
-      <td>${m.ctrl}</td>
-      <td><span class="badge ${m.risk.toLowerCase()}">${m.risk}</span></td>
-    </tr>`).join('');
-}
+      if (!data.find(c => c.id === selectedCaseId)) {
+        selectedCaseId = data.length ? data[0].id : null;
+      }
 
-$('allBtn').onclick=()=>{renderTable(false);toggle('allBtn')};
-$('highBtn').onclick=()=>{renderTable(true);toggle('highBtn')};
+      $('caseTable').innerHTML = data.map(c => `
+        <tr>
+          <td><strong>${c.id}</strong></td>
+          <td>${c.type}</td>
+          <td><span class="badge ${statusBadgeClass(c.status)}">${c.status}</span></td>
+          <td><span class="badge ${riskBadgeClass(c.risk)}">${c.risk}</span></td>
+          <td>${c.days}</td>
+          <td>${c.recommendation}</td>
+          <td>
+            <button class="secondary-btn" onclick="selectCase('${c.id}')">View Analysis</button>
+          </td>
+        </tr>
+      `).join('');
 
-function toggle(id){
-  document.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
-  $(id).classList.add('active');
-}
+      renderAnalysisPanel();
+    }
 
-renderStats();renderTable();renderTraining();renderMatrix();
-</script>
+    function renderTraining() {
+      $('training').innerHTML = training.map(t => `
+        <div>
+          <div class="small">${t.label} (${t.val}%)</div>
+          <div class="bar">
+            <div class="fill" style="width:${t.val}%"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderMatrix() {
+      $('matrix').innerHTML = matrix.map(m => `
+        <tr>
+          <td>${m.req}</td>
+          <td>${m.ctrl}</td>
+          <td><span class="badge ${m.risk.toLowerCase()}">${m.risk}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function renderAnalysisPanel(){
+      const current = cases.find(c => c.id === selectedCaseId);
+
+      if(!current){
+        $('analysisPanel').innerHTML = `<div class="small">No case available for the current filter.</div>`;
+        return;
+      }
+
+      $('analysisPanel').innerHTML = `
+        <div class="analysis-id">${current.id} • ${current.type}</div>
+        <h3>${current.recommendation}</h3>
+        <div class="small">${current.summary}</div>
+
+        <div class="analysis-grid">
+          <div class="mini-card">
+            <div class="mini-title">Modeled Case Facts</div>
+            <ul class="steps-list">
+              ${current.facts.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+          </div>
+
+          <div class="mini-card">
+            <div class="mini-title">Evaluation Factors</div>
+            <ul class="factor-list">
+              <li><strong>Severity:</strong> ${current.factors.severity}</li>
+              <li><strong>Pattern:</strong> ${current.factors.pattern}</li>
+              <li><strong>Evidence:</strong> ${current.factors.evidence}</li>
+              <li><strong>Policy Alignment:</strong> ${current.factors.policy}</li>
+              <li><strong>Community Risk:</strong> ${current.factors.communityRisk}</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="mini-card">
+          <div class="mini-title">Reasoning Behind Determination</div>
+          <ul class="steps-list">
+            ${current.analysis.map(item => `<li>${item}</li>`).join('')}
+          </ul>
+        </div>
+
+        <div class="recommendation-box">
+          <strong>Determination:</strong>
+          <div class="small" style="margin-top:6px; color:var(--text);">
+            ${current.determination}
+          </div>
+        </div>
+      `;
+    }
+
+    function toggleActive(id) {
+      document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+      $(id).classList.add('active');
+    }
+
+    function setFilter(filter, buttonId){
+      currentFilter = filter;
+      toggleActive(buttonId);
+      renderCaseTable();
+    }
+
+    function selectCase(id){
+      selectedCaseId = id;
+      renderAnalysisPanel();
+    }
+
+    window.selectCase = selectCase;
+
+    $('allBtn').onclick = () => setFilter('all', 'allBtn');
+    $('highBtn').onclick = () => setFilter('high', 'highBtn');
+    $('openBtn').onclick = () => setFilter('open', 'openBtn');
+
+    renderStats();
+    renderCaseTable();
+    renderTraining();
+    renderMatrix();
+  </script>
 </body>
 </html>
