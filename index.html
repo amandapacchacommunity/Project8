@@ -29,7 +29,7 @@
     }
 
     .container{
-      max-width:1200px;
+      max-width:1240px;
       margin:auto;
       padding:24px;
     }
@@ -65,6 +65,13 @@
 
     .two-col{
       grid-template-columns:1.15fr .85fr;
+    }
+
+    .stakeholder-layout{
+      display:grid;
+      grid-template-columns:320px 1fr;
+      gap:14px;
+      align-items:start;
     }
 
     .card{
@@ -103,6 +110,7 @@
       cursor:pointer;
       font-weight:600;
       color:var(--text);
+      transition:.15s ease;
     }
 
     button:hover{
@@ -120,6 +128,27 @@
       border-radius:10px;
       padding:7px 10px;
       font-size:13px;
+    }
+
+    .role-btn{
+      width:100%;
+      text-align:left;
+      border-radius:12px;
+      padding:12px 14px;
+      margin-bottom:8px;
+      font-size:14px;
+    }
+
+    .role-btn span{
+      display:block;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:500;
+      margin-top:4px;
+    }
+
+    .role-btn.active span{
+      color:#dbeafe;
     }
 
     table{
@@ -187,7 +216,7 @@
       color:#fff;
       padding:8px 10px;
       border-radius:8px;
-      width:250px;
+      width:260px;
       font-size:12px;
       line-height:1.45;
       text-align:left;
@@ -227,7 +256,8 @@
       margin-top:10px;
     }
 
-    .analysis-panel{
+    .analysis-panel,
+    .stakeholder-panel{
       border:1px solid var(--border);
       border-radius:16px;
       padding:16px;
@@ -288,10 +318,27 @@
       margin-top:14px;
     }
 
-    .muted-divider{
-      height:1px;
-      background:var(--border);
-      margin:14px 0;
+    .metric-pills{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin:12px 0 16px;
+    }
+
+    .metric-pill{
+      background:var(--soft);
+      color:var(--accent);
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .focus-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+      margin-top:12px;
     }
 
     .table-wrap{
@@ -305,9 +352,11 @@
       margin-top:4px;
     }
 
-    @media (max-width: 900px){
+    @media (max-width: 980px){
       .two-col,
-      .analysis-grid{
+      .analysis-grid,
+      .stakeholder-layout,
+      .focus-grid{
         grid-template-columns:1fr;
       }
     }
@@ -320,7 +369,7 @@
       <h1>Compliance Operations Demo</h1>
       <p class="small">
         This model demonstrates how compliance activities can be translated into structured workflows,
-        metrics, controls, and recommendation logic using synthetic data.
+        metrics, controls, stakeholder insights, and recommendation logic using synthetic data.
       </p>
     </div>
 
@@ -332,6 +381,47 @@
         </span>
       </h2>
       <div class="grid stats" id="stats"></div>
+    </div>
+
+    <div class="section">
+      <h2>
+        Stakeholder Views
+        <span class="info">i
+          <span class="tooltip">Each view reframes the same synthetic compliance model around the priorities of a different campus leader.</span>
+        </span>
+      </h2>
+
+      <div class="stakeholder-layout">
+        <div class="card">
+          <div class="label" style="margin-bottom:12px;">Select stakeholder</div>
+          <button class="role-btn active" id="role-richman-btn" onclick="selectStakeholder('richman')">
+            Associate Vice President, Student Health, Wellbeing & Campus Support Services
+            <span>Focus on wellbeing, supports, care pathways, and risk indicators</span>
+          </button>
+          <button class="role-btn" id="role-dean-btn" onclick="selectStakeholder('dean')">
+            Dean of Students
+            <span>Focus on student impact, escalation, continuity, and coordinated response</span>
+          </button>
+          <button class="role-btn" id="role-titleix-btn" onclick="selectStakeholder('titleix')">
+            Title IX Coordinator for Student Issues & Director of Student Wellness Education
+            <span>Focus on response process, supportive measures, education, and consistency</span>
+          </button>
+          <button class="role-btn" id="role-safety-btn" onclick="selectStakeholder('safety')">
+            Associate Vice President, Public Safety and Community Engagement
+            <span>Focus on safety review, incident patterns, operational escalation, and coordination</span>
+          </button>
+          <button class="role-btn" id="role-access-btn" onclick="selectStakeholder('access')">
+            Executive Director, Student Access Services
+            <span>Focus on access barriers, support continuity, and student participation impact</span>
+          </button>
+          <button class="role-btn" id="role-standards-btn" onclick="selectStakeholder('standards')">
+            Director of Community Standards
+            <span>Focus on conduct process, documentation quality, and corrective outcomes</span>
+          </button>
+        </div>
+
+        <div class="stakeholder-panel" id="stakeholderPanel"></div>
+      </div>
     </div>
 
     <div class="grid two-col">
@@ -587,9 +677,85 @@
       { req:'Follow-up', ctrl:'Supportive measures and monitoring notes', risk:'Medium' }
     ];
 
+    const stakeholderViews = {
+      richman: {
+        title: 'Associate Vice President, Student Health, Wellbeing & Campus Support Services',
+        summary: 'This view emphasizes how the model surfaces student wellbeing concerns, support needs, and care coordination signals across cases.',
+        priorities: [
+          'Supportive measure activation and continuity of care indicators',
+          'Student wellbeing impact across higher-risk or repeated matters',
+          'Connections between case trends and prevention or outreach planning',
+          'Cases where support response may need to remain active beyond initial review'
+        ],
+        metrics: ['Supportive measures', 'Repeat concern patterns', 'Wellbeing-linked escalation', 'Follow-up continuity'],
+        whyItMatters: 'This framing shows how compliance data can support care-centered decision-making without replacing professional judgment.'
+      },
+      dean: {
+        title: 'Dean of Students',
+        summary: 'This view emphasizes case impact on student experience, escalation pathways, coordinated response, and institutional continuity.',
+        priorities: [
+          'Cases affecting student participation, campus climate, or broader student experience',
+          'Operational visibility into open matters and delayed resolutions',
+          'Cross-functional coordination between support, conduct, and response offices',
+          'Pattern monitoring for issues that may require broader student-facing interventions'
+        ],
+        metrics: ['Open/review volume', 'Average case duration', 'Escalation needs', 'Student impact patterns'],
+        whyItMatters: 'This framing supports oversight of student response systems and helps identify when localized issues may need broader institutional action.'
+      },
+      titleix: {
+        title: 'Title IX Coordinator for Student Issues & Director of Student Wellness Education',
+        summary: 'This view emphasizes response consistency, supportive measures, education strategy, documentation quality, and procedural alignment.',
+        priorities: [
+          'Consistency in modeled recommendation logic across comparable cases',
+          'Supportive measure use and review timing',
+          'Education and prevention opportunities informed by recurring themes',
+          'Documented reasoning behind determinations and follow-up actions'
+        ],
+        metrics: ['Supportive response indicators', 'Training linkage', 'Case reasoning consistency', 'Documentation completeness'],
+        whyItMatters: 'This framing demonstrates how the model can support equitable process, educational intervention, and clear documentation.'
+      },
+      safety: {
+        title: 'Associate Vice President, Public Safety and Community Engagement',
+        summary: 'This view emphasizes safety-related escalation, pattern identification, monitoring needs, and coordination points tied to operational response.',
+        priorities: [
+          'High-risk matters requiring immediate coordination or continued oversight',
+          'Pattern indicators that may affect community safety posture',
+          'Cases with repeat-contact or ongoing disruption signals',
+          'Operational delays that may warrant added review checkpoints'
+        ],
+        metrics: ['High-risk volume', 'Repeat concern cases', 'Monitoring needs', 'Safety-linked escalation'],
+        whyItMatters: 'This framing helps connect case review to campus safety awareness, resource planning, and coordinated operational response.'
+      },
+      access: {
+        title: 'Executive Director, Student Access Services',
+        summary: 'This view emphasizes barriers to participation, continuity of access, supportive adjustments, and the effect of case-related disruptions on students.',
+        priorities: [
+          'How conduct or case processes may disrupt access to learning or participation',
+          'Need for coordinated supportive adjustments during open matters',
+          'Patterns showing where case response intersects with student functioning',
+          'Documentation that supports continuity planning across units'
+        ],
+        metrics: ['Participation impact', 'Support continuity', 'Barrier indicators', 'Cross-unit follow-up'],
+        whyItMatters: 'This framing shows how compliance operations can be interpreted through an access and continuity lens.'
+      },
+      standards: {
+        title: 'Director of Community Standards',
+        summary: 'This view emphasizes conduct process quality, corrective response, consistency of outcomes, and documentation discipline across cases.',
+        priorities: [
+          'Clear linkage between facts, factors, and resulting recommendation',
+          'Corrective responses proportionate to severity and pattern',
+          'Documentation practices that support fairness and later review',
+          'Distinguishing low-risk coaching matters from formal escalation matters'
+        ],
+        metrics: ['Corrective outcomes', 'Escalated reviews', 'Case closure quality', 'Recommendation consistency'],
+        whyItMatters: 'This framing supports conduct administration by showing how structured reasoning can strengthen consistency and defensibility.'
+      }
+    };
+
     const $ = id => document.getElementById(id);
     let currentFilter = 'all';
     let selectedCaseId = cases[0].id;
+    let selectedStakeholder = 'richman';
 
     function riskBadgeClass(risk){
       return risk.toLowerCase();
@@ -628,6 +794,44 @@
           <div class="small">${c.n}</div>
         </div>
       `).join('');
+    }
+
+    function renderStakeholderPanel(){
+      const view = stakeholderViews[selectedStakeholder];
+      $('stakeholderPanel').innerHTML = `
+        <div class="analysis-id">Stakeholder View</div>
+        <h3>${view.title}</h3>
+        <div class="small">${view.summary}</div>
+
+        <div class="metric-pills">
+          ${view.metrics.map(m => `<div class="metric-pill">${m}</div>`).join('')}
+        </div>
+
+        <div class="focus-grid">
+          <div class="mini-card">
+            <div class="mini-title">What this stakeholder would likely focus on</div>
+            <ul class="steps-list">
+              ${view.priorities.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+          </div>
+          <div class="mini-card">
+            <div class="mini-title">Most relevant sections in this demo</div>
+            <ul class="steps-list">
+              <li>Metrics Snapshot for operational signal visibility</li>
+              <li>Case Review Table for prioritization and pattern review</li>
+              <li>Case Study Analysis for rationale and defensibility</li>
+              <li>Training Coverage and Compliance Matrix for system response</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="recommendation-box">
+          <strong>Why this view matters:</strong>
+          <div class="small" style="margin-top:6px; color:var(--text);">
+            ${view.whyItMatters}
+          </div>
+        </div>
+      `;
     }
 
     function renderCaseTable() {
@@ -740,13 +944,22 @@
       renderAnalysisPanel();
     }
 
+    function selectStakeholder(key){
+      selectedStakeholder = key;
+      document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
+      $(`role-${key}-btn`).classList.add('active');
+      renderStakeholderPanel();
+    }
+
     window.selectCase = selectCase;
+    window.selectStakeholder = selectStakeholder;
 
     $('allBtn').onclick = () => setFilter('all', 'allBtn');
     $('highBtn').onclick = () => setFilter('high', 'highBtn');
     $('openBtn').onclick = () => setFilter('open', 'openBtn');
 
     renderStats();
+    renderStakeholderPanel();
     renderCaseTable();
     renderTraining();
     renderMatrix();
