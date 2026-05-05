@@ -1,36 +1,39 @@
-# Amanda | Higher Ed Compliance Operations Demo
+# Compliance Operations Workflow Model (2025)
 
-Interactive GitHub Pages portfolio demo for a fictional New York private university using fully synthetic data.
+## Overview
+This project demonstrates how compliance activities can be translated into structured workflows, metrics, controls, stakeholder insights, and recommendation logic.
 
-## What changed in this interview-ready version
-- Added a clear portfolio-style landing section
-- Added Presentation Mode for committee walkthroughs
-- Added a concise investigation framework
-- Added interpretive insights and talking points
-- Kept the interactive dashboard and compliance matrix
+The model is designed to show compliance as a practical operating system that supports clarity, accountability, and decision-making.
 
-## What it demonstrates
-- Investigation workflow metrics
-- Case filtering by type, status, risk, and resolution time
-- Training completion coverage
-- Institution profile assumptions
-- Compliance matrix with high-risk control filtering
-- Leadership-oriented framing for hiring committees
+## What This Demonstrates
+- Compliance workflow design
+- Control and monitoring logic
+- Stakeholder reporting
+- Process architecture
+- Operational clarity through structured data
 
-## Publishing on GitHub Pages
-1. Create a GitHub repository
-2. Upload `index.html` and `README.md`
-3. Go to **Settings → Pages**
-4. Choose your branch and folder
-5. Save to publish
+## Key Features
+- Compliance activity workflow model
+- Metrics and control indicators
+- Stakeholder-oriented reporting
+- Recommendation logic
+- Synthetic operating data
 
-## Suggested repo name
-`higher-ed-compliance-ops-demo`
+## Example Use Cases
+This type of model could support:
+- Compliance program operations
+- Audit readiness
+- Policy implementation
+- Institutional reporting
+- Process improvement
 
-## Customize before publishing
-- Replace “Amanda” with your preferred professional name format
-- Add a short bio or LinkedIn link if desired
-- Update wording to match your actual experience
+## Data Note
+All data is synthetic and created for demonstration purposes only.
 
-## Disclaimer
-This repository uses synthetic data only for interview and portfolio purposes. It contains no real student, employee, or institutional case data and does not constitute legal advice.
+## About This Work
+This project reframes compliance as a partnership function that helps institutions operate clearly, responsibly, and sustainably.
+
+## Author
+Amanda Paccha  
+Institutional Strategy, Governance & Decision Support  
+GitHub: https://github.com/amandapacchacommunity
